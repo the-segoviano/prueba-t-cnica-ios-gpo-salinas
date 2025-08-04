@@ -116,3 +116,40 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 
 
+
+struct Encuesta: Codable {
+    let data: [Pregunta]
+}
+
+struct Pregunta: Codable, Identifiable {
+    var id: String { pregunta }
+    let pregunta: String
+    let values: [Valor]
+}
+
+struct Valor: Codable, Identifiable {
+    var id: String { label }
+    let label: String
+    let value: Double
+}
+
+
+class EncuestaViewModel: ObservableObject {
+    @Published var preguntas: [Pregunta] = []
+    
+    init() {
+        loadData()
+    }
+    
+    func loadData() {
+        guard let url = Bundle.main.url(forResource: "test", withExtension: "json") else { return }
+        do {
+            let data = try Data(contentsOf: url)
+            let decoded = try JSONDecoder().decode(Encuesta.self, from: data)
+            self.preguntas = decoded.data
+        } catch {
+            print("Error al cargar el JSON: \(error)")
+        }
+    }
+}
+
