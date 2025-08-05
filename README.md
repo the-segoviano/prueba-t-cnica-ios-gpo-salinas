@@ -175,3 +175,11 @@ El color de la vista del `UIViewController` que será mostrado en la ejecución 
    - El `ViewController` se asigna como el `rootViewController` de la ventana (`window.rootViewController = viewController`), y la ventana se hace visible con `makeKeyAndVisible()`. Esto asegura que el `ViewController` sea el primero en mostrarse al iniciar la app.
 
    - Aunque `viewDidLoad()` establece el color de fondo en rojo, la asignación `UIColor.yellow` en `application(_:didFinishLaunchingWithOptions:)` se aplica primero y sobrescribe el valor inicial. Por lo tanto, al ejecutarse la app, la vista del `UIViewController` mostrará un fondo amarillo.
+
+
+
+### Pruebas de la App funcionando
+
+1.  [App funcionando](https://mega.nz/file/bjB3lIqA#JHgu-rtOyRXTU4efjbpxmGQfa9na8T8zT91dQMkoEvU).
+
+2.  [Feature de cambiar el background de la vista desde Firestore Realtima Database](https://mega.nz/file/fyR1xYyI#tVL0D5e-cHRCx5Oas-5ZiQEuTNY6VvqLjfk1m_ivDDI).
