@@ -60,7 +60,7 @@ Para instalar la app en un dispositivo físico, es **indispensable** configurar 
 
 ### 🖼️ Optimización de Imágenes
 
-Se recomienda que todas las imágenes añadidas a `Assets.xcassets` tengan un **tamaño inferior a 1 MB** para no afectar el rendimiento ni el tamaño final de la aplicación.
+Se recomienda que todas las imágenes que se elijan desde la galería de fotos o tomadas desde la cámara tengan un **tamaño inferior a 1 MB** para no afectar el rendimiento ni el tamaño final de la aplicación.
 
 
 # Complemento de la Prueba Técnica: Preguntas teóricas.
