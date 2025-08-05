@@ -16,11 +16,12 @@ struct ContentView: View {
     @State private var showingActionSheet = false
     @State private var showingGraphs = false
     
-    // Colores personalizados
-    let primaryColor = Color(hex: "4B0082") // Índigo
-    let secondaryColor = Color(hex: "1E3A8A") // Azul oscuro (interpretando L3546 como un azul)
+    @StateObject private var formViewModel = FormViewModel()
+    @StateObject private var colorViewModel = ColorViewModel()
     
-    @StateObject private var viewModel = ColorViewModel()
+    // Colores personalizados
+    let primaryColor = Color(hex: "4B0082")
+    let secondaryColor = Color(hex: "1E3A8A")
     
     var body: some View {
         
@@ -75,7 +76,7 @@ struct ContentView: View {
                             }
                         }
                         
-                        // Celda 2: Selfie
+                        // Tomar fotografía
                         FormCell {
                             VStack(alignment: .leading, spacing: 12) {
                                 Label("Fotografía", systemImage: "camera.fill")
@@ -130,7 +131,29 @@ struct ContentView: View {
                             }
                         }
                         
-                        // Celda 3: Botón Gráficas
+                        // Último registro guardado
+                        if let profile = formViewModel.lastProfile {
+                            FormCell {
+                                VStack(alignment: .leading) {
+                                    Label("Último Registro Guardado", systemImage: "person.crop.circle.badge.checkmark")
+                                        .font(.headline)
+                                        .foregroundColor(primaryColor)
+                                    
+                                    HStack {
+                                        Image(uiImage: profile.image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 60, height: 60)
+                                            .clipShape(Circle())
+                                        
+                                        Text(profile.fullName)
+                                            .font(.body)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Botón Gráficas
                         FormCell {
                             Button(action: {
                                 showingGraphs = true
@@ -157,10 +180,40 @@ struct ContentView: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
+                        
+                        // Botón Guardar
+                        if formViewModel.isLoading {
+                            ProgressView()
+                                .padding()
+                        } else {
+                            Button(action: {
+                                formViewModel.saveData(name: userName, image: selectedImage)
+                            }) {
+                                HStack {
+                                    Image(systemName: "paperplane.fill")
+                                    Text("Guardar")
+                                }
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(LinearGradient(gradient: Gradient(colors: [primaryColor, secondaryColor]), startPoint: .leading, endPoint: .trailing))
+                                .cornerRadius(12)
+                            }
+                            .disabled(userName.isEmpty || selectedImage == nil)
+                            .opacity((userName.isEmpty || selectedImage == nil) ? 0.6 : 1.0)
+                        }
+                        
+                        if let errorMessage = formViewModel.errorMessage {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .font(.caption)
+                        }
+                        
                     }
                     .padding()
                 }
-                // viewModel.backgroundColor.color.ignoresSafeArea()
+                // colorViewModel.backgroundColor.color.ignoresSafeArea()
                 .background( Color(.systemGroupedBackground) )
             }
             .navigationBarHidden(true)
@@ -190,6 +243,22 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingGraphs) {
             GraphsView()
+        }
+        .onAppear {
+            formViewModel.fetchLastProfile()
+        }
+        .alert(isPresented: $formViewModel.isSuccess) {
+            Alert(
+                title: Text("Éxito"),
+                message: Text("Los datos se han guardado correctamente."),
+                dismissButton: .default(Text("OK")) { 
+                    // Limpiar el formulario y actualizar la vista
+                    userName = ""
+                    selectedImage = nil
+                    formViewModel.isSuccess = false
+                    formViewModel.fetchLastProfile() // Actualizar el último registro
+                }
+            )
         }
         
     }
