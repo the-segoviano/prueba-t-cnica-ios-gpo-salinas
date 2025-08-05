@@ -20,6 +20,7 @@ struct ContentView: View {
     let primaryColor = Color(hex: "4B0082") // Índigo
     let secondaryColor = Color(hex: "1E3A8A") // Azul oscuro (interpretando L3546 como un azul)
     
+    @StateObject private var viewModel = ColorViewModel()
     
     var body: some View {
         
@@ -159,7 +160,8 @@ struct ContentView: View {
                     }
                     .padding()
                 }
-                .background(Color(.systemGroupedBackground))
+                // viewModel.backgroundColor.color.ignoresSafeArea()
+                .background( Color(.systemGroupedBackground) )
             }
             .navigationBarHidden(true)
         }
