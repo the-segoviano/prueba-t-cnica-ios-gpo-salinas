@@ -14,7 +14,7 @@ Para compilar y ejecutar el proyecto, sigue estos pasos:
 
 1.  **Clonar el Repositorio**:
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
+    git clone git@github.com:the-segoviano/prueba-t-cnica-ios-gpo-salinas.git
     ```
 2.  **Abrir el Proyecto**: Abre el archivo `technical-test-ios.xcodeproj` con Xcode.
 3.  **Firma de Código**: Configura la firma del proyecto en la pestaña **Signing & Capabilities** para poder ejecutar en un dispositivo físico.
